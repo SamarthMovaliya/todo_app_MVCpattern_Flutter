@@ -40,6 +40,8 @@ dependencies:
   google_fonts:
   pdf: ^3.8.4
   printing: ^5.9.3
+  sqflite:
+  path:
 
 dev_dependencies:
   flutter_test:

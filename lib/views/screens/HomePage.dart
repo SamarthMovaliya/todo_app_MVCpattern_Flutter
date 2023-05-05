@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:printing/printing.dart';
 import 'package:provider/provider.dart';
+import 'package:todo_app_flutter/controller/database_helper.dart';
 import 'package:todo_app_flutter/controller/time_controller.dart';
 import 'package:todo_app_flutter/controller/todo_helper.dart';
 import 'package:todo_app_flutter/models/resources.dart';
@@ -20,6 +21,8 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  late Future data;
+
   List<TodoObject> allTodos = [];
   final pdf = pw.Document();
 
@@ -88,7 +91,7 @@ class _HomePageState extends State<HomePage> {
                                           width: 2, color: PdfColors.black),
                                     ),
                                     child: pw.Padding(
-                                      padding:const pw.EdgeInsets.all(10),
+                                      padding: const pw.EdgeInsets.all(10),
                                       child: pw.Text(
                                         '${e.todo}',
                                         style: const pw.TextStyle(
@@ -126,6 +129,8 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void initState() {
+    DataBaseHelper.dataBaseHelper.initDB();
+
     super.initState();
   }
 
@@ -357,7 +362,7 @@ class _HomePageState extends State<HomePage> {
           ),
           Expanded(
             flex: 8,
-            child: (allTodos.isEmpty)
+            child: (allTodos.isNotEmpty)
                 ? Center(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -381,36 +386,47 @@ class _HomePageState extends State<HomePage> {
                 : StatefulBuilder(
                     builder: (context, setState) {
                       print('update');
-                      return ListView.builder(
-                        itemCount: allTodos.length,
-                        itemBuilder: (context, index) {
-                          return Padding(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 20, vertical: 4),
-                            child: Card(
-                              elevation: 4,
-                              child: ListTile(
-                                leading: Text(
-                                  '${index + 1})',
-                                  style: const TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 20),
-                                ),
-                                title: Text(
-                                  allTodos[index].todo,
-                                  style: GoogleFonts.alata(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 25,
+                      return FutureBuilder(
+                        future: DataBaseHelper.dataBaseHelper.fetchAllRecode(),
+                        builder: (context, snapshot) {
+                          if (snapshot.hasData) {
+                            List<TodoObject>? myTodo = snapshot.data;
+                            return ListView.builder(
+                              itemCount: myTodo?.length,
+                              itemBuilder: (context, index) {
+                                return Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 20, vertical: 4),
+                                  child: Card(
+                                    elevation: 4,
+                                    child: ListTile(
+                                      leading: Text(
+                                        '${index + 1})',
+                                        style: const TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 20),
+                                      ),
+                                      title: Text(
+                                        myTodo![index].todo.toString(),
+                                        style: GoogleFonts.alata(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 25,
+                                        ),
+                                      ),
+                                      trailing: Text(
+                                        myTodo![index].time.toString(),
+                                        style: GoogleFonts.alata(
+                                          fontSize: 15,
+                                        ),
+                                      ),
+                                    ),
                                   ),
-                                ),
-                                trailing: Text(
-                                  allTodos[index].time,
-                                  style: GoogleFonts.alata(
-                                    fontSize: 15,
-                                  ),
-                                ),
-                              ),
-                            ),
+                                );
+                              },
+                            );
+                          }
+                          return Center(
+                            child: Text('${snapshot.error}'),
                           );
                         },
                       );
@@ -1110,6 +1126,12 @@ class _HomePageState extends State<HomePage> {
                                                     hello();
                                                     todos;
                                                   });
+                                                  DataBaseHelper.dataBaseHelper
+                                                      .insertData(
+                                                          todo:
+                                                              temporary['todo'],
+                                                          time: temporary[
+                                                              'time']);
                                                   hello();
                                                   todoController.clear();
                                                   Navigator.pop(context);

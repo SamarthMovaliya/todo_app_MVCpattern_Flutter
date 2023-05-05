@@ -5,7 +5,8 @@ import 'package:todo_app_flutter/controller/time_controller.dart';
 import 'package:todo_app_flutter/views/screens/HomePage.dart';
 import 'package:todo_app_flutter/views/screens/SplashScreen.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(MyApp());
 }
 
