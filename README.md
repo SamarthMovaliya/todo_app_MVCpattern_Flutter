@@ -20,8 +20,8 @@ This app will provide you facility to store your daily todos from 9:00 AM to 7:0
 
 
 ## About it
- 1) this app will give you latest news based on preveling market comdition of different economy.
- 2) And also gives you option to view news based on categories in different countries.
+ 1) this app will give you facility to store your daily todos.
+ 2) You can store your daily todos from 9:00AM to 7:00PM and can generate a pdf of table sheet also.
 
 ## Authors
 
@@ -37,6 +37,7 @@ This app is created in flutter SDK using Android Studio, basically this can be r
 
 - Splashscreen
 - Light and Dark Mode
+- pdf generator of todos.
 
 
 
@@ -64,8 +65,11 @@ For support, email samarthmovaliya1@gmail.com.
 
 
 
+https://github.com/SamarthMovaliya/todo_app_MVCpattern_Flutter/assets/121867874/cfe8e896-9d4d-4398-9a0a-85dcd4a01c1c
 
-https://user-images.githubusercontent.com/121867874/236637446-1afc5f09-1075-4375-ac1c-d737eed1bb2e.mov
+
+
+
 
 
 
